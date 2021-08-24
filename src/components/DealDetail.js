@@ -1,18 +1,15 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Image } from 'react-native';
 import PropTypes from 'prop-types'
+import { useState } from 'react'
 
 import { priceDisplay } from '../util'
 
-const DealItem = ({ deal, onPress }) => {
-  const handlePress = () => {
-    onPress(deal.key)
-  }
-  
+const DealDetail = ({ initialDealData }) => {
+  const [deal, setDeal] = useState(initialDealData)
+
   return (
-    <TouchableOpacity style={styles.deal}
-    onPress={handlePress}
-    >
+    <View style={styles.deal}>
       <Image 
         source={{ uri: deal.media[0] }} 
         style={styles.image}
@@ -24,15 +21,14 @@ const DealItem = ({ deal, onPress }) => {
           <Text style={styles.price}>{priceDisplay(deal.price)}</Text>
         </View>
       </View>
-
-    </TouchableOpacity>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   deal: {
     marginHorizontal: 12,
-    marginTop: 12,
+    marginTop: 50,
   },
   
   image: {
@@ -69,9 +65,8 @@ const styles = StyleSheet.create({
   },
 })
 
-DealItem.prototypes = {
-  deal: PropTypes.object.isRequired,
-  onPress: PropTypes.func.isRequired,
+DealDetail.prototypes = {
+  initialDealData: PropTypes.object.isRequired
 }
 
-export default DealItem
+export default DealDetail

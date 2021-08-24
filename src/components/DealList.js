@@ -3,12 +3,13 @@ import { StyleSheet, View, FlatList } from 'react-native';
 import PropTypes from 'prop-types'
 import DealItem from './DealItem';
 
-const DealList = ({ deals }) => {
+const DealList = ({ deals, onItemPress }) => {
   return (
     <View style={styles.list}>
       <FlatList 
         data={deals}
-        renderItem={({item}) => <DealItem deal={item} />}
+        renderItem={({item}) => <DealItem 
+        deal={item} onPress={onItemPress}/> }
       />
     </View>
   )
@@ -24,7 +25,8 @@ const styles = StyleSheet.create({
 })
 
 DealList.prototypes = {
-  deals: PropTypes.array.isRequired
+  deals: PropTypes.array.isRequired,
+  onItemPress: PropTypes.func.isRequired,
 }
 
 export default DealList

@@ -3,9 +3,19 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState } from 'react'
 import ajax from './src/ajax'
 import DealList from './src/components/DealList'
+import DealDetail from './src/components/DealDetail';
 
 export default function App() {
   const [deals, setDeals] = useState([])
+  const [currentDealId, setCurrentDealId] = useState(null)
+
+  const currentDeal = () => {
+    return deals.find(deal => deal.key === currentDealId )
+  }
+
+  const setCurrentDeal = (deal) => {
+    setCurrentDealId(deal)
+  }
 
   useEffect(() => {
     ajax.fetchInitialDeals().then(fetchedDeals => {
@@ -13,15 +23,17 @@ export default function App() {
     })
   }, [])
   
+  if (currentDealId) {
+    return <DealDetail initialDealData={currentDeal()}/>
+  } 
+
+  if (deals.length > 0) {
+    return <DealList deals={deals} onItemPress={setCurrentDeal} />
+  }
+
   return (
     <View style={styles.container}>
-      {
-        deals.length > 0 ? (
-          <DealList deals={deals} />
-        ) : (
-          <Text style={styles.header}>Bakesale!</Text>
-        )
-      }
+      <Text style={styles.header}>Bakesale!</Text>
     </View>
   );
 }
