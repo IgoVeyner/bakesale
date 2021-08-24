@@ -1,13 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import PropTypes from 'prop-types'
+import DealItem from './DealItem';
 
 const DealList = ({ deals }) => {
   return (
     <View style={styles.list}>
       <FlatList 
         data={deals}
-        renderItem={({item}) => <Text>{item.title}</Text>}
+        renderItem={({item}) => <DealItem deal={item} />}
       />
     </View>
   )
