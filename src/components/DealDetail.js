@@ -1,12 +1,19 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import PropTypes from 'prop-types'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import ajax from '../ajax';
 
 import { priceDisplay } from '../util'
 
 const DealDetail = ({ initialDealData }) => {
   const [deal, setDeal] = useState(initialDealData)
+
+  useEffect(() => {
+    ajax.fetchDealDetail(deal.key).then(fullDeal => {
+      setDeal(fullDeal)
+    })
+  }, [])
 
   return (
     <View style={styles.deal}>
@@ -14,6 +21,7 @@ const DealDetail = ({ initialDealData }) => {
         source={{ uri: deal.media[0] }} 
         style={styles.image}
       />
+
       <View style={styles.info}>
         <Text style={styles.title}>{deal.title}</Text>
         <View style={styles.footer}>
@@ -21,6 +29,18 @@ const DealDetail = ({ initialDealData }) => {
           <Text style={styles.price}>{priceDisplay(deal.price)}</Text>
         </View>
       </View>
+
+      {deal.user && (
+        <View>
+          <Image source={{ uri: deal.user.avatar }} style={styles.avatar} />
+          <Text>{deal.user.name}</Text>
+        </View>
+      )}
+      
+      <View>
+        <Text>{deal.description}</Text>
+      </View>
+
     </View>
   )
 }
@@ -62,6 +82,11 @@ const styles = StyleSheet.create({
   price: {
     flex: 1,
     textAlign: 'right',
+  },
+
+  avatar: {
+    height: 60,
+    width: 60,
   },
 })
 
