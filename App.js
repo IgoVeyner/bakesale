@@ -4,10 +4,23 @@ import { useEffect, useState } from 'react'
 import ajax from './src/ajax'
 import DealList from './src/components/DealList'
 import DealDetail from './src/components/DealDetail';
+import SearchBar from './src/components/SearchBar';
 
 export default function App() {
   const [deals, setDeals] = useState([])
   const [currentDealId, setCurrentDealId] = useState(null)
+  const [dealsFromSearch, setDealsFromSearch] = useState([])
+  const dealsToDisplay = dealsFromSearch.length > 0 ? dealsFromSearch : deals
+
+  const searchDeals = (searchTerm = []) => {
+    if (searchTerm) {
+      ajax.fetchDealsSearchResults(searchTerm).then(searchResults => {
+        setDealsFromSearch(searchResults)
+      })
+    } else {
+      setDealsFromSearch(searchTerm)
+    }
+  }
 
   const currentDeal = () => {
     return deals.find(deal => deal.key === currentDealId )
@@ -29,15 +42,22 @@ export default function App() {
   
   if (currentDealId) {
     return (
-      <DealDetail 
-        initialDealData={currentDeal()} 
-        onBack={unsetCurrentDeal}
-      />  
+      <View style={styles.main}>
+        <DealDetail 
+          initialDealData={currentDeal()} 
+          onBack={unsetCurrentDeal}
+        />  
+      </View>
     )
   } 
 
-  if (deals.length > 0) {
-    return <DealList deals={deals} onItemPress={setCurrentDeal} />
+  if (dealsToDisplay.length > 0) {
+    return (
+      <View style={styles.main}>
+        <SearchBar searchDeals={searchDeals} />
+        <DealList deals={dealsToDisplay} onItemPress={setCurrentDeal} />
+      </View>
+    ) 
   }
 
   return (
@@ -57,5 +77,9 @@ const styles = StyleSheet.create({
 
   header: {
     fontSize: 40
-  }
+  },
+
+  main: {
+    marginTop: 30,
+  },
 });

@@ -58,7 +58,6 @@ const DealDetail = ({ initialDealData, onBack }) => {
 const styles = StyleSheet.create({
   deal: {
     marginHorizontal: 12,
-    marginTop: 50,
   },
 
   detail: {
