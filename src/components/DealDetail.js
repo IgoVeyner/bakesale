@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types'
 import { useState, useEffect } from 'react'
 import ajax from '../ajax';
 
 import { priceDisplay } from '../util'
 
-const DealDetail = ({ initialDealData }) => {
+const DealDetail = ({ initialDealData, onBack }) => {
   const [deal, setDeal] = useState(initialDealData)
 
   useEffect(() => {
@@ -17,6 +17,10 @@ const DealDetail = ({ initialDealData }) => {
 
   return (
     <View style={styles.deal}>
+      <TouchableOpacity onPress={onBack}>
+        <Text style={styles.backLink}>Back</Text>
+      </TouchableOpacity>
+
       <Image 
         source={{ uri: deal.media[0] }} 
         style={styles.image}
@@ -55,8 +59,16 @@ const styles = StyleSheet.create({
   deal: {
     marginHorizontal: 12,
     marginTop: 50,
+  },
+
+  detail: {
     borderColor: '#bbb',
     borderWidth: 1,
+  },
+
+  backLink: {
+    marginBottom: 5,
+    color: '#22f',
   },
   
   image: {
@@ -119,7 +131,8 @@ const styles = StyleSheet.create({
 })
 
 DealDetail.prototypes = {
-  initialDealData: PropTypes.object.isRequired
+  initialDealData: PropTypes.object.isRequired,
+  onBack: PropTypes.func.isRequired,
 }
 
 export default DealDetail

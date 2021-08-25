@@ -17,6 +17,10 @@ export default function App() {
     setCurrentDealId(deal)
   }
 
+  const unsetCurrentDeal = () => {
+    setCurrentDealId(null)
+  }
+
   useEffect(() => {
     ajax.fetchInitialDeals().then(fetchedDeals => {
       setDeals(fetchedDeals)
@@ -24,7 +28,12 @@ export default function App() {
   }, [])
   
   if (currentDealId) {
-    return <DealDetail initialDealData={currentDeal()}/>
+    return (
+      <DealDetail 
+        initialDealData={currentDeal()} 
+        onBack={unsetCurrentDeal}
+      />  
+    )
   } 
 
   if (deals.length > 0) {
