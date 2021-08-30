@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Animated } from 'react-native';
+import { StyleSheet, Text, View, Easing, Dimensions, Animated } from 'react-native';
 import { useEffect, useState } from 'react'
 import ajax from './src/ajax'
 import DealList from './src/components/DealList'
@@ -37,17 +37,26 @@ export default function App() {
   }
 
   const animateTitle = (direction = 1) => {
-    Animated.spring(
-      titleXPos, 
-      { toValue: direction * 100 }
-    ).start(() => animateTitle(-1 * direction))
+    const width = Dimensions.get('window').width - 150
+
+    Animated.timing(
+      titleXPos, { 
+        toValue: direction * (width / 2), 
+        duration: 1000,
+        easing: Easing.ease,
+      }
+    ).start(({ finished }) => {
+      if (finished) {
+        animateTitle(-1 * direction)
+      }
+    })
   }
 
   useEffect(() => {
     animateTitle()
-    // ajax.fetchInitialDeals().then(fetchedDeals => {
-    //   setDeals(fetchedDeals)
-    // })
+    ajax.fetchInitialDeals().then(fetchedDeals => {
+      setDeals(fetchedDeals)
+    })
   }, [])
   
   if (currentDealId) {
