@@ -1,6 +1,16 @@
 import React from 'react';
-import { StyleSheet, View, Text, 
-  Image, TouchableOpacity, PanResponder, Animated, Dimensions } from 'react-native';
+import { 
+  StyleSheet, 
+  View, 
+  Text, 
+  Image, 
+  TouchableOpacity, 
+  PanResponder, 
+  Animated, 
+  Dimensions,
+  Button,
+  Linking
+ } from 'react-native';
 import PropTypes from 'prop-types'
 import { useState, useEffect } from 'react'
 import ajax from '../ajax';
@@ -38,6 +48,10 @@ const DealDetail = ({ initialDealData, onBack }) => {
       }
     },
   })
+
+  const openDealUrl = () => {
+    Linking.openURL(deal.url)
+  }
 
   const handleSwipe = () => {
     if (!deal.media[imageIndex + indexDirection]) {
@@ -101,6 +115,8 @@ const DealDetail = ({ initialDealData, onBack }) => {
       <View style={styles.description}>
         <Text>{deal.description}</Text>
       </View>
+
+      <Button title="But this deal!" onPress={openDealUrl} />
 
     </View>
   )
