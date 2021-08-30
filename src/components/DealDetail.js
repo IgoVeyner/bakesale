@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, 
+  Image, TouchableOpacity, PanResponder, Animated, Dimensions } from 'react-native';
 import PropTypes from 'prop-types'
 import { useState, useEffect } from 'react'
 import ajax from '../ajax';
@@ -8,6 +9,29 @@ import { priceDisplay } from '../util'
 
 const DealDetail = ({ initialDealData, onBack }) => {
   const [deal, setDeal] = useState(initialDealData)
+  const [imageIndex, setImageIndex] = useState(0)
+
+  const imageXPos = new Animated.Value(0)
+
+  const imagePanResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderMove: (evt, gs) => {
+      imageXPos.setValue(gs.dx)
+    },
+    onPanResponderRelease: (evt, gs) => {
+      const width = Dimensions.get('window').width 
+
+      if (Math.abs(gs.dx) > width * 0.4) {
+        const direction = Math.sign(gs.dx)
+
+        Animated.timing(imageXPos, {
+          toValue: direction * width,
+          duration: 250,
+        }).start()
+      }
+
+    },
+  })
 
   useEffect(() => {
     ajax.fetchDealDetail(deal.key).then(fullDeal => {
@@ -21,9 +45,10 @@ const DealDetail = ({ initialDealData, onBack }) => {
         <Text style={styles.backLink}>Back</Text>
       </TouchableOpacity>
 
-      <Image 
-        source={{ uri: deal.media[0] }} 
-        style={styles.image}
+      <Animated.Image 
+        {...imagePanResponder.panHandlers}
+        source={{ uri: deal.media[imageIndex] }} 
+        style={[{left: imageXPos}, styles.image]}
       />
 
       <View style={styles.detail}>
