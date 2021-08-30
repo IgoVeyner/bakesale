@@ -10,8 +10,11 @@ import { priceDisplay } from '../util'
 const DealDetail = ({ initialDealData, onBack }) => {
   const [deal, setDeal] = useState(initialDealData)
   const [imageIndex, setImageIndex] = useState(0)
+  const [indexDirection, setIndexDirection] = useState(1)
 
   const imageXPos = new Animated.Value(0)
+
+  const width = Dimensions.get('window').width 
 
   const imagePanResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -19,19 +22,42 @@ const DealDetail = ({ initialDealData, onBack }) => {
       imageXPos.setValue(gs.dx)
     },
     onPanResponderRelease: (evt, gs) => {
-      const width = Dimensions.get('window').width 
-
       if (Math.abs(gs.dx) > width * 0.4) {
         const direction = Math.sign(gs.dx)
 
         Animated.timing(imageXPos, {
           toValue: direction * width,
           duration: 250,
+        }).start(() => handleSwipe())
+        
+        setIndexDirection(-1 * direction)
+      } else {
+        Animated.spring(imageXPos, {
+          toValue: 0,
         }).start()
       }
-
     },
   })
+
+  const handleSwipe = () => {
+    if (!deal.media[imageIndex + indexDirection]) {
+
+      Animated.spring(imageXPos, {
+        toValue: 0,
+      }).start()
+
+      return 
+    }
+    setImageIndex(imageIndex + indexDirection)
+  } 
+
+  useEffect(() => {
+    imageXPos.setValue(indexDirection * width)
+
+    Animated.spring(imageXPos, {
+      toValue: 0,
+    }).start()
+  }, [imageIndex])
 
   useEffect(() => {
     ajax.fetchDealDetail(deal.key).then(fullDeal => {
