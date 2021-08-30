@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Animated } from 'react-native';
 import { useEffect, useState } from 'react'
 import ajax from './src/ajax'
 import DealList from './src/components/DealList'
@@ -11,6 +11,8 @@ export default function App() {
   const [currentDealId, setCurrentDealId] = useState(null)
   const [dealsFromSearch, setDealsFromSearch] = useState([])
   const dealsToDisplay = dealsFromSearch.length > 0 ? dealsFromSearch : deals
+
+  const titleXPos = new Animated.Value(0)
 
   const searchDeals = (searchTerm = []) => {
     if (searchTerm) {
@@ -34,10 +36,18 @@ export default function App() {
     setCurrentDealId(null)
   }
 
+  const animateTitle = (direction = 1) => {
+    Animated.spring(
+      titleXPos, 
+      { toValue: direction * 100 }
+    ).start(() => animateTitle(-1 * direction))
+  }
+
   useEffect(() => {
-    ajax.fetchInitialDeals().then(fetchedDeals => {
-      setDeals(fetchedDeals)
-    })
+    animateTitle()
+    // ajax.fetchInitialDeals().then(fetchedDeals => {
+    //   setDeals(fetchedDeals)
+    // })
   }, [])
   
   if (currentDealId) {
@@ -61,9 +71,9 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[{ left: titleXPos }, styles.container]}>
       <Text style={styles.header}>Bakesale!</Text>
-    </View>
+    </Animated.View>
   );
 }
 
