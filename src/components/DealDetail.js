@@ -188,6 +188,10 @@ const styles = StyleSheet.create({
     borderStyle: 'dotted',
     margin: 10,
     padding: 10,
+  },
+
+  deal: {
+    marginBottom: 20,
   }
 })
 
