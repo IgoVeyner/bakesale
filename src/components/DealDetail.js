@@ -9,7 +9,8 @@ import {
   Animated, 
   Dimensions,
   Button,
-  Linking
+  Linking,
+  ScrollView
  } from 'react-native';
 import PropTypes from 'prop-types'
 import { useState, useEffect } from 'react'
@@ -80,7 +81,7 @@ const DealDetail = ({ initialDealData, onBack }) => {
   }, [])
 
   return (
-    <View style={styles.deal}>
+    <ScrollView style={styles.deal}>
       <TouchableOpacity onPress={onBack}>
         <Text style={styles.backLink}>Back</Text>
       </TouchableOpacity>
@@ -118,7 +119,7 @@ const DealDetail = ({ initialDealData, onBack }) => {
 
       <Button title="But this deal!" onPress={openDealUrl} />
 
-    </View>
+    </ScrollView>
   )
 }
 
