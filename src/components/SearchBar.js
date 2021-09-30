@@ -12,7 +12,7 @@ const SearchBar = ({ searchDeals }) => {
     debouncedSearchDeals(searchTerm)
   }, [searchTerm])
 
-  const searchedDeals = (searchTerm) => {
+  const searchedDeals = () => {
     searchDeals(searchTerm)
     inputElement.current.blur()
   }
