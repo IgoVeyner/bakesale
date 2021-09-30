@@ -43,6 +43,7 @@ export default function App() {
       titleXPos, { 
         toValue: direction * (width / 2), 
         duration: 1000,
+        useNativeDriver: false,
         easing: Easing.ease,
       }
     ).start(({ finished }) => {
