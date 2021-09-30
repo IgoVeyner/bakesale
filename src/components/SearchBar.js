@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import debounce from 'lodash.debounce'
 
-const SearchBar = ({ searchDeals }) => {
-  const [searchTerm, setSearchTerm] = useState("")
+const SearchBar = ({ searchDeals, initialSearchTerm }) => {
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm)
   const inputElement = useRef(null)
 
   useEffect(() => {
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
 
 SearchBar.prototypes = {
   searchDeals: PropTypes.func.isRequired,
+  initialSearchTerm: PropTypes.string.isRequired
 }
 
 export default SearchBar

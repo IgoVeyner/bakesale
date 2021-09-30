@@ -8,6 +8,7 @@ import SearchBar from './src/components/SearchBar';
 
 export default function App() {
   const [deals, setDeals] = useState([])
+  const [activeSearchTerm, setActiveSerachTerm] = useState("")
   const [currentDealId, setCurrentDealId] = useState(null)
   const [dealsFromSearch, setDealsFromSearch] = useState([])
   const dealsToDisplay = dealsFromSearch.length > 0 ? dealsFromSearch : deals
@@ -18,6 +19,7 @@ export default function App() {
     if (searchTerm) {
       ajax.fetchDealsSearchResults(searchTerm).then(searchResults => {
         setDealsFromSearch(searchResults)
+        setActiveSerachTerm(searchTerm)
       })
     } else {
       setDealsFromSearch(searchTerm)
@@ -74,7 +76,7 @@ export default function App() {
   if (dealsToDisplay.length > 0) {
     return (
       <View style={styles.main}>
-        <SearchBar searchDeals={searchDeals} />
+        <SearchBar searchDeals={searchDeals} initialSearchTerm={activeSearchTerm} />
         <DealList deals={dealsToDisplay} onItemPress={setCurrentDeal} />
       </View>
     ) 
